@@ -12,6 +12,8 @@ const Heading = ({ children }: Props, ref: Ref<HTMLHeadingElement>) => {
 export default forwardRef(Heading);
 
 const StyledHeading = styled.h1`
+  display: flex;
+  justify-content: center;
   font-size: 2rem;
   padding: 2rem 0;
 `;
