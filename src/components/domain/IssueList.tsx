@@ -19,15 +19,25 @@ const IssueList = () => {
     setPageNumber((prev) => prev + 1);
   };
 
+  const onIntersection = (
+    entries: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) => {
+    const entry = entries[0];
+    if (entry.isIntersecting) {
+      observer.unobserve(entry.target);
+      fetchIssues();
+    }
+  };
+
   useEffect(() => {
-    fetchIssues();
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        fetchIssues();
-      }
-    });
-    observer.observe(bottom.current);
-  }, []);
+    const observer = new IntersectionObserver(onIntersection);
+    if (observer && bottom.current) observer.observe(bottom.current);
+
+    return () => {
+      observer && observer.disconnect();
+    };
+  }, [issues]);
 
   return (
     <>
