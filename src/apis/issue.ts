@@ -4,30 +4,46 @@ import { Issue } from "./types";
 
 const issueApi = {
   get: async (pageNumber: number) => {
-    try {
-      const res = await octokitInstance.request(
-        "GET /repos/{owner}/{repo}/issues",
-        {
-          owner: ORGANIZATION_NAME,
-          repo: REPOSITORY_NAME,
-          page: pageNumber,
-          state: "open",
-          sort: "comments",
-        }
-      );
-      const issues: Issue[] = res.data.map((issue) => ({
+    const res = await octokitInstance.request(
+      "GET /repos/{owner}/{repo}/issues",
+      {
+        owner: ORGANIZATION_NAME,
+        repo: REPOSITORY_NAME,
+        page: pageNumber,
+        state: "open",
+        sort: "comments",
+      }
+    );
+    const issues: Omit<Issue, "profile_img" | "body">[] = res.data.map(
+      (issue) => ({
         number: issue.number,
         title: issue.title,
         username: issue.user?.login,
-        profile_img: issue.user?.avatar_url,
         created_at: issue.created_at,
         comments: issue.comments,
-        body: issue.body,
-      }));
-      return issues;
-    } catch (err) {
-      console.error(err, "이슈 목록을 불러오는 중 오류가 발생했습니다");
-    }
+      })
+    );
+    return issues;
+  },
+  getDetail: async (issueNumber: number) => {
+    const res = await octokitInstance.request(
+      "GET /repos/{owner}/{repo}/issues/{issue_number}",
+      {
+        owner: ORGANIZATION_NAME,
+        repo: REPOSITORY_NAME,
+        issue_number: issueNumber,
+      }
+    );
+    const issue = {
+      number: res.data.number,
+      title: res.data.title,
+      username: res.data.user?.login,
+      profile_img: res.data.user?.avatar_url,
+      comments: res.data.comments,
+      created_at: res.data.created_at,
+      body: res.data.body,
+    };
+    return issue;
   },
 };
 

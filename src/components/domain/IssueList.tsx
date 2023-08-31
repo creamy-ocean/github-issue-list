@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Fragment } from "react";
 import issueApi from "../../apis/issue";
 import { Issue } from "../../apis/types";
 import IssueItem from "./IssueItem";
@@ -8,13 +8,20 @@ import { styled } from "styled-components";
 const IssueList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
-  const [issues, setIssues] = useState<Issue[]>([]);
+  const [issues, setIssues] = useState<Omit<Issue, "profile_img" | "body">[]>(
+    []
+  );
+  const [error, setError] = useState(null);
   const bottom = useRef<any>(null);
 
   const fetchIssues = async () => {
     setIsLoading(true);
-    const currIssues = await issueApi.get(pageNumber);
-    currIssues && setIssues((prevIssues) => [...prevIssues, ...currIssues]);
+    try {
+      const currIssues = await issueApi.get(pageNumber);
+      currIssues && setIssues((prevIssues) => [...prevIssues, ...currIssues]);
+    } catch (err: any) {
+      setError(err);
+    }
     setIsLoading(false);
     setPageNumber((prev) => prev + 1);
   };
@@ -41,14 +48,15 @@ const IssueList = () => {
 
   return (
     <>
+      {error && <div>이슈 목록을 불러오는 중 오류가 발생했습니다</div>}
       <StyledUl>
         {issues &&
           issues.map((issue, idx) => {
             return (
-              <>
-                <IssueItem key={issue.number} issue={issue} isDetail={false} />
-                {(idx + 1) % 4 === 0 && <AdItem key={idx} />}
-              </>
+              <Fragment key={issue.number}>
+                <IssueItem issue={issue} />
+                {(idx + 1) % 4 === 0 && <AdItem />}
+              </Fragment>
             );
           })}
       </StyledUl>

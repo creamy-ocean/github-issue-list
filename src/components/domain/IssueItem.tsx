@@ -1,36 +1,23 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { Issue } from "../../apis/types";
+import { Link } from "react-router-dom";
 
 interface Props {
-  issue: Issue;
-  isDetail: Boolean;
+  issue: Omit<Issue, "profile_img" | "body">;
 }
 
-const IssueItem = ({ issue, isDetail }: Props) => {
-  const navigate = useNavigate();
-
+const IssueItem = ({ issue }: Props) => {
   return (
     <StyledLi>
       <FlexBox>
-        {isDetail && <StyledImg src={`${issue.profile_img}`} />}
         <div>
           <div>
             #{issue.number}
-            {isDetail ? (
-              <StyledSpan>{issue.title}</StyledSpan>
-            ) : (
-              <StyledSpan
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  navigate(`/${issue.number}`, {
-                    state: { issue },
-                  });
-                }}
-              >
+            <StyledLink to={`/${issue.number}`}>
+              <StyledSpan style={{ cursor: "pointer" }}>
                 {issue.title}
               </StyledSpan>
-            )}
+            </StyledLink>
           </div>
           <div>
             작성자: {issue.username},{"  "}
@@ -45,7 +32,7 @@ const IssueItem = ({ issue, isDetail }: Props) => {
           </div>
         </div>
       </FlexBox>
-      <div>코멘트: {issue.comments}</div>
+      <Comments>코멘트: {issue.comments}</Comments>
     </StyledLi>
   );
 };
@@ -66,11 +53,18 @@ const FlexBox = styled.div`
   display: flex;
 `;
 
-const StyledImg = styled.img`
-  width: 3rem;
+const StyledLink = styled(Link)`
+  text-decoration: none;
 `;
 
 const StyledSpan = styled.span`
   color: #111;
   margin-left: 0.5rem;
+`;
+
+const Comments = styled.div`
+  min-width: 6rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
 `;
