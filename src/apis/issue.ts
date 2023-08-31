@@ -10,8 +10,9 @@ const issueApi = {
         {
           owner: ORGANIZATION_NAME,
           repo: REPOSITORY_NAME,
-          sort: "comments",
           page: pageNumber,
+          state: "open",
+          sort: "comments",
         }
       );
       const issues: Issue[] = res.data.map((issue) => ({
