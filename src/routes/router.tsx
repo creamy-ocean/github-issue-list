@@ -15,7 +15,7 @@ const router = createBrowserRouter([
         element: <IssueList />,
       },
       {
-        path: "/:no",
+        path: "/:issueNumber",
         element: <IssueDetail />,
       },
     ],
