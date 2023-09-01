@@ -48,6 +48,7 @@ const IssueList = () => {
     return () => {
       observer && observer.disconnect();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [issues]);
 
   return (

@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import issueApi from "../../apis/issue";
 import { Issue } from "../../apis/types";
@@ -24,6 +24,7 @@ const IssueDetail = () => {
       }
     };
     fetchIssue();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
