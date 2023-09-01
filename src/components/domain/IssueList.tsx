@@ -1,23 +1,27 @@
-import { useEffect, useState, useRef, Fragment } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { styled } from "styled-components";
 import issueApi from "../../apis/issue";
 import { Issue } from "../../apis/types";
-import IssueItem from "./IssueItem";
 import AdItem from "./AdItem";
-import { styled } from "styled-components";
+import IssueItem from "./IssueItem";
 
 const IssueList = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [issues, setIssues] = useState<Omit<Issue, "profile_img" | "body">[]>(
     []
   );
-  const [error, setError] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+
+  const PER_PAGE = 30;
   const bottom = useRef<any>(null);
 
   const fetchIssues = async () => {
     setIsLoading(true);
     try {
       const currIssues = await issueApi.get(pageNumber);
+      currIssues.length < PER_PAGE && setHasMore(false);
       currIssues && setIssues((prevIssues) => [...prevIssues, ...currIssues]);
     } catch (err: any) {
       setError(err);
@@ -61,7 +65,7 @@ const IssueList = () => {
           })}
       </StyledUl>
       {isLoading && <div>이슈 목록을 불러오는 중입니다</div>}
-      <div ref={bottom}></div>
+      {hasMore && <div ref={bottom}></div>}
     </>
   );
 };
