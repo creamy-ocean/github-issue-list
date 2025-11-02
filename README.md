@@ -1,10 +1,10 @@
-# Github Issue List
+# Github Issue Viewer
 > Wanted Frontend Pre-Onboarding Week 2 Assignment
 <br/>
 
 ## Project Overview
 <!--- facebook react repository의 이슈 목록과 이슈 상세 내용을 확인할 수 있는 사이트-->
-A website that allows users to view the issue list and detailed issue information from the Facebook React repository using infinite scrolling feature.
+A web application for browing issues from the Facebook React repository with infinite scrolling functionality.
 <br/><br/>
 
 
@@ -14,7 +14,7 @@ https://co-github-issue-list.netlify.app
 
 
 ## Preview
-![image](https://github.com/creamy-ocean/github-issue-list/assets/93719660/013a19d9-12d0-4649-b91b-8e1cc870dd8f)
+![Preview Screenshot](https://github.com/creamy-ocean/github-issue-list/assets/93719660/013a19d9-12d0-4649-b91b-8e1cc870dd8f)
 <br/>
 
 ## Features
@@ -22,9 +22,15 @@ https://co-github-issue-list.netlify.app
 - 스크롤 할 때마다 이슈 목록 추가 로딩(무한 스크롤)
   - Intersection Observer를 이용해 구현
 - 특정 순서마다 광고 이미지 출력하기-->
-- Fetch issue lists and details using the Github API via Octokit.
-- Load additional issue data on scroll (infinite scrolling).
-  - Implemented using Intersection Observer.
+### Issue List & Details
+- Fetch and display issues from the React repository using Github API via Octokit
+- View detailed information for individual issues
+
+### Infinite Scrolling
+- Automatically loads additional issues as user scrolls
+- Implemented using Intersection Observer API
+
+**Implementation:**
   ```typescript
   const onIntersection = (
     entries: IntersectionObserverEntry[],
@@ -44,11 +50,12 @@ https://co-github-issue-list.netlify.app
     return () => {
       observer && observer.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [issues]);
   ```
-- Display an advertisement image at specific intervals.
-<br/>
+
+### Advertisement Display
+- Shows promotional image at regular intervals within the issue list
+
 
 ## Tech Stack
 <div>
